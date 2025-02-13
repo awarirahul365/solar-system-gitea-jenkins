@@ -1,8 +1,8 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage('VM Node version'){
-            step{
+    stages {
+        stage('VM Node version') {
+            step {
                 sh '''
                     node -v
                     npm -v
