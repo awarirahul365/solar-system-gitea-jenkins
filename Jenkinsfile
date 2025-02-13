@@ -13,7 +13,9 @@ pipeline {
                     tty: true
             '''
         }
-    stages {
+    }
+
+    stages {  
         stage('VM Node version') {
             steps {
                 sh '''
