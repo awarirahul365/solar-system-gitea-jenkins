@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages {
         stage('VM Node version') {
-            step {
+            steps {
                 sh '''
                     node -v
                     npm -v
