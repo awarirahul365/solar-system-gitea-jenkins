@@ -11,6 +11,14 @@ pipeline {
                     command:
                     - cat
                     tty: true
+                  - name: java
+                    image: openjdk:11
+                    command:
+                    - cat
+                    tty: true
+                    env:
+                    - name: JAVA_HOME
+                      value: /usr/local/openjdk-11
             '''
             defaultContainer 'node'
         }
@@ -35,11 +43,13 @@ pipeline {
         }
         stage('OWASP dependencies check') {
             steps {
-                dependencyCheck additionalArguments: '''
-                    --scan \'./\'
-                    --out \'./\'
-                    --format \'ALL\'
-                    --prettyPrint''', odcInstallation: 'OWASP-DepCheck-10'
+                container('java') {
+                    dependencyCheck additionalArguments: '''
+                        --scan \'./\'
+                        --out \'./\'
+                        --format \'ALL\'
+                        --prettyPrint''', odcInstallation: 'OWASP-DepCheck-10'
+                }
             }
         }
     }
