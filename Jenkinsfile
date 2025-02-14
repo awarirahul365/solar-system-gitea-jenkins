@@ -29,6 +29,13 @@ pipeline {
         stage('Unit Testing'){
             steps{
                 withCredentials([usernamePassword(credentialsId: 'mongo-db-credential', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+                    sh 'npm test'
+                }
+            }
+        }
+        stage('Code Coverage'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'mongo-db-credential', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
                     catchError(buildResult: 'SUCCESS', message: 'This will be fixed later', stageResult: 'UNSTABLE') {
                         sh 'npm run coverage'
                     }
