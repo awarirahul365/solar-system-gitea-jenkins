@@ -12,19 +12,25 @@ pipeline {
                     - cat
                     tty: true
             '''
+            defaultContainer 'node'
         }
     }
 
     stages {  
-        stage('VM Node version') {
+        stage('Node Version and checkout') {
             steps {
-                container('node') {
-                    sh '''
-                        ls -R
-                        node -v
-                        npm -v
-                    '''
-                }
+                sh '''
+                    ls -R
+                    node -v
+                    npm -v
+                '''
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                sh '''
+                    npm install --no-audit
+                '''
             }
         }
     }
