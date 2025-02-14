@@ -47,6 +47,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'mongo-db-credential', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
                     sh '''
+                        echo "MongoDB URI from env: $MONGO_URI"
                         npm test
                     '''
                 }
