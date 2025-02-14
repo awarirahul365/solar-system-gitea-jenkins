@@ -26,7 +26,13 @@ pipeline {
                 '''
             }
         }
-        
+        stage('Unit Testing'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'mongo-db-credential', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+                    sh 'npm run coverage'
+                }
+            }
+        }
     }
     post {
         always {
