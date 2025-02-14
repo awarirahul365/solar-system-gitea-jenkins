@@ -7,7 +7,7 @@ pipeline {
                 spec:
                   containers:
                   - name: node 
-                    image: node:18  
+                    image: node:22  
                     command:
                     - cat
                     tty: true
@@ -20,6 +20,7 @@ pipeline {
             steps {
                 container('node') {
                     sh '''
+                        ls -R
                         node -v
                         npm -v
                     '''
