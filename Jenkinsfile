@@ -7,6 +7,7 @@ pipeline {
         MONGO_URI="mongodb+srv://supercluster.d83jj.mongodb.net/superData"
         MONGO_USERNAME="superuser"
         MONGO_PASSWORD="superpassword"
+        JUNIT_REPORT_PATH="test-results.xml"  // Add this to specify the output file
     }
     stages {  
         stage('Node Version and checkout') {
@@ -31,10 +32,15 @@ pipeline {
                     echo "MongoDB URI from env: $MONGO_URI"
                     echo "MongoDB USERNAME from env: $MONGO_USERNAME"
                     echo "MongoDB PASSWORD from env: $MONGO_PASSWORD"
-                    npm test
+                    npx mocha app-test.js --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=test-results.xml --exit
                 '''
-                junit allowEmptyResults: true, stdioRetention: '', testResults: 'test-results.xml'
+                junit allowEmptyResults: true, testResults: 'test-results.xml'
             }
+        }
+    }
+    post {
+        always {
+            cleanWs()  // Clean workspace after build
         }
     }
 }
