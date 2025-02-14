@@ -1,30 +1,10 @@
 pipeline {
-    agent {
-        kubernetes {
-            yaml '''
-                apiVersion: v1
-                kind: Pod
-                spec:
-                  containers:
-                  - name: node 
-                    image: node:22  
-                    command:
-                    - cat
-                    tty: true
-                  - name: java
-                    image: openjdk:11
-                    command:
-                    - cat
-                    tty: true
-                    env:
-                    - name: JAVA_HOME
-                      value: /usr/local/openjdk-11
-            '''
-            defaultContainer 'node'
-        }
+    agent any
+    tools{
+        nodejs 'nodejs-22-6-0'
     }
     environment{
-        MONGO_URI="mongodb+srv://$MONGO_USERNAME:$MONGO_PASSWORD@supercluster.d83jj.mongodb.net/superData?retryWrites=true&w=majority"
+        MONGO_URI="mongodb+srv://supercluster.d83jj.mongodb.net/superData"
         MONGO_USERNAME="superuser"
         MONGO_PASSWORD="superpassword"
     }
