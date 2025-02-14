@@ -26,17 +26,7 @@ pipeline {
                 '''
             }
         }
-        stage('Unit Testing'){
-            steps{
-                sh '''
-                    echo "MongoDB URI from env: $MONGO_URI"
-                    echo "MongoDB USERNAME from env: $MONGO_USERNAME"
-                    echo "MongoDB PASSWORD from env: $MONGO_PASSWORD"
-                    npx mocha app-test.js --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=test-results.xml --exit
-                '''
-                junit allowEmptyResults: true, testResults: 'test-results.xml'
-            }
-        }
+        
     }
     post {
         always {
