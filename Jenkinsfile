@@ -33,6 +33,7 @@ pipeline {
                     echo "MongoDB PASSWORD from env: $MONGO_PASSWORD"
                     npm test
                 '''
+                junit allowEmptyResults: true, stdioRetention: '', testResults: 'test-results.xml'
             }
         }
     }
