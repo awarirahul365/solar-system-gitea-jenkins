@@ -23,7 +23,9 @@ pipeline {
             defaultContainer 'node'
         }
     }
-
+    environment{
+        MONGO_URI="mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+    }
     stages {  
         stage('Node Version and checkout') {
             steps {
@@ -41,30 +43,13 @@ pipeline {
                 '''
             }
         }
-        stage('OWASP dependencies check') {
-            steps {
-                container('java') {
-                    dependencyCheck additionalArguments: '''
-                        --scan \'./\'
-                        --out \'./\'
-                        --format \'ALL\'
-                        --prettyPrint''', odcInstallation: 'OWASP-DepCheck-10'
-
-                    stash includes: 'dependency-check-report.*', name: 'owasp-reports'
+        stage('Unit Testing'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'mongo-db-credential', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+                    sh '''
+                        npm test
+                    '''
                 }
-            }
-        }
-        stage('Process Reports') {
-            agent any  
-            steps {
-                // Unstash the reports
-                unstash 'owasp-reports'
-                
-                // Archive the artifacts
-                archiveArtifacts artifacts: 'dependency-check-report.*', fingerprint: true
-                
-                // Publish the report
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
     }
